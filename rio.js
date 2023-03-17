@@ -7,7 +7,7 @@ function start() {
     if (!name || !server || isNaN(keyMin) || keyMin === "") {
         alert("Paramètres incorrects.")
     } else {
-        $("#dungeons-content").html("");
+        $("#dungeons").html("");
         $("#bff-tbody").html("");
         apiGetCharacter(name, server, keyMin, excluded);
     }
@@ -146,7 +146,7 @@ function apiGetDungeon(char, dungeon, key_min, bff, excluded, callback) {
                     }
                     if (i == filter.length) {
                         var average = parseFloat(timed / count) || 0;
-                        $("#dungeons").show()
+                        $("#content-dungeons").show()
                         //$("#dungeons-content").append(`${name} :<br/> ${count} runs - `)
                         //$("#dungeons-content").append(`${Math.round(100 * average)}%<br/><br/>`);
                         addNewDungeon(dungeon, count, timed);
@@ -189,6 +189,14 @@ function addNewDungeon(dungeon, count, timed){
     }else{
         $("#dungeons").append(str);
     }
+
+    $('.dungeon-card').sort(function(a, b) {
+        if (a.textContent < b.textContent) {
+          return -1;
+        } else {
+          return 1;
+        }
+      }).appendTo('#dungeons');
     
 }
 
@@ -211,7 +219,7 @@ function updateBff(bff, char) {
         }
         addBffRow(e);
     })
-    $("#bff").show();
+    $("#content-bff").show();
 }
 function addBffRow(e) {
     var str = `<tr>
