@@ -31,6 +31,26 @@ function getClassColor(className) {
     }
 }
 
+/*value de 0 à 1*/
+function getQualityColor(value){
+    if (value < 0.2){
+        return {background:"#9d9d9d",foreground:"#ffffff"};
+    }
+    if (value < 0.4){
+        return {background:"#ffffff",foreground:"#000000"};
+    }
+    if (value < 0.6){
+        return {background:"#1eff00",foreground:"#ffffff"};
+    }
+    if (value < 0.8){
+        return {background:"#0070dd",foreground:"#ffffff"};
+    }
+    if (value < 0.9){
+        return {background:"#a335ee",foreground:"#ffffff"};
+    }
+    return {background:"#ff8000",foreground:"#ffffff"};
+}
+
 function sortTable(n) {
     var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
     table = document.getElementById("bff-table");

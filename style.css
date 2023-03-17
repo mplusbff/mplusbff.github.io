@@ -1,19 +1,22 @@
 @import url('https://fonts.googleapis.com/css?family=Bebas Neue&display=swap');
 
 body {
+    font-family: "Bebas neue";
     background-color: #353535;
     color: white;
     margin: 0;
     padding: 0;
+    display: flex;
+    justify-content: center;
 }
 
 .main-container {
-    margin: 20px
+    margin: 20px;
+    width:80%;
 }
 
 
 #character {
-    font-family: "Bebas neue";
     margin: 20px 0px;
     display: flex;
     justify-content: center;
@@ -34,36 +37,158 @@ body {
 
 #character-server {
     margin-left: 10px;
-   color: #555555;
+    color: #555555;
 }
 
-.tr-clickable{
+.tr-clickable {
     cursor: pointer;
 }
 
-.sort-icon{
+.sort-icon {
     color: yellow;
     font-size: 0.7em;
     margin-left: 5px;
 }
 
-.fa-heart{
-    color:red;
+.fa-heart {
+    color: red;
     font-size: 0.7em;
 }
 
-th{
+th {
     padding: 5px;
 }
-td{
+
+td {
     padding: 0px 5px;
 }
 
-section{
+section {
     background-color: #66666635;
     padding: 10px;
     border-radius: 10px;
     margin-bottom: 10px;
 }
 
-tbody tr:hover {background-color: #555555;}
+tbody tr:hover {
+    background-color: #555555;
+}
+
+/*#region Dungeon Card*/
+.dungeon-card {    
+    width: 25%;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.test{
+    background-color: #242424;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+}
+
+.dungeon-card img {
+    border-radius: 10px 0px 0px 10px;
+    object-fit: cover;
+    width: 30%;
+}
+
+.dungeon-content {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+.dungeon-info{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.dungeon-bar {
+    margin: 10px 0px ;
+    width: 100%;
+    background-color: lightgray;
+    height: 20px;
+    border-radius: 10px;
+}
+.dungeon-bar-fill {
+    background-color: #ff8000;
+    height: 20px;
+    text-align: end;
+    padding-right: 10px;
+    box-sizing: border-box;
+    border-radius: 10px;
+}
+.dungeon-details{
+    margin-top:5px
+}
+
+.dungeon-details span{
+    color: greenyellow
+}
+
+.dungeon-name{
+    font-family: "Bebas neue";
+    font-size: 1.2em;
+}
+
+.dungeon-bar-text{
+    position: relative;
+}
+
+/*#endregion */
+#dungeons{
+    padding: 0px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (max-width: 1440px) {
+    .dungeon-card {    
+        width: 33%;
+        padding: 10px;
+        box-sizing: border-box;
+    }
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (max-width: 1200px) {
+    .dungeon-card {    
+        width: 50%;
+        padding: 10px;
+        box-sizing: border-box;
+    }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (max-width: 992px) {
+    .main-container{
+        width:100%;
+    }
+  
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (max-width: 768px) {
+    .dungeon-card {    
+        width: 100%;
+        padding: 10px;
+        box-sizing: border-box;
+    }
+
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (max-width: 600px) {
+
+}
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+
+}

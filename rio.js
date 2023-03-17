@@ -147,8 +147,9 @@ function apiGetDungeon(char, dungeon, key_min, bff, excluded, callback) {
                     if (i == filter.length) {
                         var average = parseFloat(timed / count) || 0;
                         $("#dungeons").show()
-                        $("#dungeons-content").append(`${name} :<br/> ${count} runs - `)
-                        $("#dungeons-content").append(`${Math.round(100 * average)}%<br/><br/>`);
+                        //$("#dungeons-content").append(`${name} :<br/> ${count} runs - `)
+                        //$("#dungeons-content").append(`${Math.round(100 * average)}%<br/><br/>`);
+                        addNewDungeon(dungeon, count, timed);
                         callback({ count, timed });
                     }
                 });
@@ -164,6 +165,31 @@ function apiGetDungeon(char, dungeon, key_min, bff, excluded, callback) {
         .always(function () {
             // alert("complete");
         });
+}
+
+function addNewDungeon(dungeon, count, timed){
+    var percent = Math.round(100*timed/count);
+    var color = getQualityColor(timed/count);
+
+    var str=
+    `<div class="dungeon-card" id="dungeon-${dungeon.dungeon.id}">`+
+    `   <div class="test">`+
+    `       <img src="https://cdnassets.raider.io/images/keystone-icons/${dungeon.dungeon.id}.jpg">`+
+    `       <div class="dungeon-content">`+
+    `               <div class="dungeon-name">${dungeon.dungeon.name}</div>`+
+    `               <div class="dungeon-details"><span>${timed} / ${count}</span> timed</div>`+
+    `           <div class="dungeon-bar">`+
+    `              <div class="dungeon-bar-fill" style="width:${percent}%;background-color:${color.background};color:${color.foreground}">${percent}%</div>`+
+    `           </div>`+
+    `       </div>`+
+    `   </div>`+
+    `</div>`;
+    if ($(`#dungeon-${dungeon.dungeon.id}`).length){
+        $(`#dungeon-${dungeon.dungeon.id}`).replaceWith(str);
+    }else{
+        $("#dungeons").append(str);
+    }
+    
 }
 
 function updateBff(bff, char) {
@@ -189,7 +215,7 @@ function updateBff(bff, char) {
 }
 function addBffRow(e) {
     var str = `<tr>
-        <td style="color:${getClassColor(e[1].class)};font-weight:bold">${e[0].split("-")[0]}</td>
+        <td style="color:${getClassColor(e[1].class)}">${e[0].split("-")[0]}</td>
         <td>${e[1].total}</td>
         <td>${Math.round(e[1].average)}%</td>
         </tr>`;
