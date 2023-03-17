@@ -28,28 +28,31 @@
             <div id="character-name"></div>
             <div id="character-server"></div>
         </div>
-        <h2 id="average"></h2>
-        <section id="dungeons">            
-        
-            <div id="dungeons-content"></div>
-        </section>
-        <section id="bff" style="display: none;">
-            <h2><i class="fa-solid fa-heart"></i> Best friends forever</i></h2>
-            <div>
-                <table id="bff-table" style="background-color: #353535;color:white;">
-                    <thead>
-                        <tr class="tr-clickable">
-                            <th onclick="sortTable(0)">Pseudo<i class="fa-solid fa-sort sort-icon"></i></th>
-                            <th onclick="sortTable(1)">Runs<i class="fa-solid fa-sort sort-icon"></i></th>
-                            <th onclick="sortTable(2)">Moyenne<i class="fa-solid fa-sort sort-icon"></i></th>
-                        </tr>
-                    </thead>
-                    <tbody id="bff-tbody">
-
-                    </tbody>
-                </table>
+        <div id="content">
+            <div id="content-dungeons" class="content-column">
+                <h2 id="average"></h2>
+                <section id="dungeons"></section>
             </div>
-        </section>
+            <div id="content-bff" class="content-column">
+                <h2><i class="fa-solid fa-heart"></i> Best friends forever</i></h2>
+                <section id="bff" style="display: none;">
+                    <div>
+                        <table id="bff-table">
+                            <thead>
+                                <tr class="tr-clickable">
+                                    <th onclick="sortTable(0)">Pseudo<i class="fa-solid fa-sort sort-icon"></i></th>
+                                    <th onclick="sortTable(1)">Runs<i class="fa-solid fa-sort sort-icon"></i></th>
+                                    <th onclick="sortTable(2)">Moyenne<i class="fa-solid fa-sort sort-icon"></i></th>
+                                </tr>
+                            </thead>
+                            <tbody id="bff-tbody">
+        
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+        </div>
     </div>
 </body>
 

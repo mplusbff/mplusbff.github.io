@@ -57,26 +57,40 @@ body {
 
 th {
     padding: 5px;
+    text-align: start;
 }
 
 td {
     padding: 0px 5px;
 }
 
-section {
-    background-color: #66666635;
-    padding: 10px;
-    border-radius: 10px;
-    margin-bottom: 10px;
-}
-
 tbody tr:hover {
     background-color: #555555;
 }
 
+#content{
+    display: flex;
+    flex-direction: row;
+}
+
+#bff-table{
+    width: 100%;
+}
+
+.content-column{
+    width: 50%;
+    background-color: #66666635;
+    padding: 10px;
+    border-radius: 10px;
+    margin: 10px; 
+    box-sizing: border-box;
+}
+
+
+
 /*#region Dungeon Card*/
 .dungeon-card {    
-    width: 25%;
+    width: 50%;
     padding: 10px;
     box-sizing: border-box;
 }
@@ -133,7 +147,7 @@ tbody tr:hover {
 
 .dungeon-name{
     font-family: "Bebas neue";
-    font-size: 1.2em;
+    font-size: 1.1em;
 }
 
 .dungeon-bar-text{
@@ -150,7 +164,7 @@ tbody tr:hover {
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (max-width: 1440px) {
     .dungeon-card {    
-        width: 33%;
+        width: 100%;
         padding: 10px;
         box-sizing: border-box;
     }
@@ -158,29 +172,26 @@ tbody tr:hover {
 
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (max-width: 1200px) {
-    .dungeon-card {    
-        width: 50%;
-        padding: 10px;
-        box-sizing: border-box;
+    .main-container{
+        width:100%;
     }
 }
 
 /* Large devices (laptops/desktops, 992px and up) */
 @media only screen and (max-width: 992px) {
-    .main-container{
-        width:100%;
-    }
+  
   
 }
 
 /* Medium devices (landscape tablets, 768px and up) */
 @media only screen and (max-width: 768px) {
-    .dungeon-card {    
-        width: 100%;
-        padding: 10px;
-        box-sizing: border-box;
+    #content{
+        flex-direction: column;
     }
 
+    .content-column{
+        width: 100%;
+    }
 }
 
 /* Small devices (portrait tablets and large phones, 600px and up) */
