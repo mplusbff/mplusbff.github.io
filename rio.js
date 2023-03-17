@@ -7,8 +7,8 @@ function start() {
     if (!name || !server || isNaN(keyMin) || keyMin === "") {
         alert("Paramètres incorrects.")
     } else {
-        $("#dungeons").html("");
-        $("#bff").html("");
+        $("#dungeons-content").html("");
+        $("#bff-tbody").html("");
         apiGetCharacter(name, server, keyMin, excluded);
     }
 }
@@ -146,8 +146,8 @@ function apiGetDungeon(char, dungeon, key_min, bff, excluded, callback) {
                     }
                     if (i == filter.length) {
                         var average = parseFloat(timed / count) || 0;
-                        $("#dungeons").append(`${name} :<br/> ${count} runs - `)
-                        $("#dungeons").append(`${Math.round(100 * average)}%<br/><br/>`);
+                        $("#dungeons-content").append(`${name} :<br/> ${count} runs - `)
+                        $("#dungeons-content").append(`${Math.round(100 * average)}%<br/><br/>`);
                         callback({ count, timed });
                     }
                 });
@@ -166,7 +166,7 @@ function apiGetDungeon(char, dungeon, key_min, bff, excluded, callback) {
 }
 
 function updateBff(bff, char) {
-    $("#bff").html("");
+    $("#bff-tbody").html("");
 
     // Create items array
     var sorted = Object.keys(bff).map(function (key) {
@@ -183,8 +183,8 @@ function updateBff(bff, char) {
             return;
         }
         addBffRow(e);
-
     })
+    $("#bff").show();
 }
 function addBffRow(e) {
     var str = `<tr>
@@ -192,5 +192,5 @@ function addBffRow(e) {
         <td>${e[1].total}</td>
         <td>${Math.round(e[1].average)}%</td>
         </tr>`;
-    $("#bff").append(str)
+    $("#bff-tbody").append(str)
 }

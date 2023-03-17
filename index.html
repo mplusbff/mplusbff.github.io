@@ -7,12 +7,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="./style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
-    integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
+        integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="./rio.js"></script>
-    <script src="misc.js"></script>
+    <script src="./misc.js"></script>
 </head>
 
 <body>
@@ -28,23 +28,28 @@
             <div id="character-name"></div>
             <div id="character-server"></div>
         </div>
-        <h2 id="average"></h2>
-        <div id="dungeons"></div>
-        <h2>BFF</i></h2>
-        <div>
-            <table id="bff-table" style="background-color: #353535;color:white;">
-                <thead>
-                    <tr class="tr-clickable">
-                        <th onclick="sortTable(0)">Pseudo<i class="fa-solid fa-sort sort-icon"></i></th>
-                        <th onclick="sortTable(1)">Runs<i class="fa-solid fa-sort sort-icon"></i></th>
-                        <th onclick="sortTable(2)">Moyenne<i class="fa-solid fa-sort sort-icon"></i></th>
-                    </tr>
-                </thead>
-                <tbody id="bff">
+        
+        <section id="dungeons">
+            <h2 id="average"></h2>
+            <div id="dungeons-content"></div>
+        </section>
+        <section id="bff" style="display: none;">
+            <h2><i class="fa-solid fa-heart"></i> Best friends forever</i></h2>
+            <div>
+                <table id="bff-table" style="background-color: #353535;color:white;">
+                    <thead>
+                        <tr class="tr-clickable">
+                            <th onclick="sortTable(0)">Pseudo<i class="fa-solid fa-sort sort-icon"></i></th>
+                            <th onclick="sortTable(1)">Runs<i class="fa-solid fa-sort sort-icon"></i></th>
+                            <th onclick="sortTable(2)">Moyenne<i class="fa-solid fa-sort sort-icon"></i></th>
+                        </tr>
+                    </thead>
+                    <tbody id="bff-tbody">
 
-                </tbody>
-            </table>
-        </div>
+                    </tbody>
+                </table>
+            </div>
+        </section>
     </div>
 </body>
 
