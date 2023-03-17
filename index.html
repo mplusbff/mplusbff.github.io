@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+</head>
+
+<body>
+
+    <input type="text" id="name" name="name" placeholder="Mith-dalaran" value="Mith-dalaran" required>
+    <input type="number" id="key-min" name="key-min" value="20" required>
+    <input type="submit" value="go" onClick="start()" />
+    <br>
+    <input type="text" id="exclude" name="exclude" placeholder="Pikachu, Ronflex, Carapuce">
+
+    <h1 id="character"></h1>
+    <h2 id="average"></h2>
+    <div id="dungeons"></div>
+    <h2>BFF</h2>
+    <div>
+        <table id="bff-table" style="background-color: #353535;color:white;">
+            <thead>
+                <tr>
+                    <th onclick="sortTable(0)">Pseudo</th>
+                    <th onclick="sortTable(1)">Runs</th>
+                    <th onclick="sortTable(2)">Moyenne</th>
+                </tr>
+            </thead>
+            <tbody id="bff">
+
+            </tbody>
+        </table>
+    </div>
+    <script>
+
+        function start() {
+            var name = $("#name").val().split("-")[0]
+            var server = $("#name").val().split("-")[1]
+            var keyMin = $("#key-min").val()
+            var excluded = $("#exclude").val().split(",").map(item => item.trim());
+
+            if (!name || !server || isNaN(keyMin) || keyMin === "") {
+                alert("Paramètres incorrects.")
+            } else {
+                $("#dungeons").html("");
+                $("#bff").html("");
+                apiGetCharacter(name, server, keyMin, excluded);
+            }
+        }
+
+        function apiGetDungeons(char, keyMin, excluded) {
+            var totalDj = 0
+            var timed = 0;
+
+            let base = `https://raider.io/api/characters/mythic-plus-scored-runs?season=season-df-1&role=all&mode=scored&affixes=all&date=all&characterId=${char.id}`;
+            const url = 'https://corsproxy.io/?' + encodeURIComponent(base);
+            var jqxhr = $.ajax(url)
+                .done(function (result) {
+                    var bff = [];
+                    result.dungeons.forEach(dungeon => {
+                        apiGetDungeon(char, dungeon, keyMin, bff, excluded, function callback(info) {
+
+                            if (info.count > 0) {
+                                totalDj += info.count;
+                                timed += info.timed;
+                            }
+                            updateAverage(keyMin, timed, totalDj);
+                        });
+                    });
+                })
+                .fail(function () {
+                    // alert("error");
+                })
+                .always(function () {
+                    // alert("complete");
+                });
+        }
+
+        function updateAverage(keyMin, timed, totalDj) {
+            $("#average").html(`Clés timées (${keyMin}+): ${Math.round(100 * timed / totalDj)}% (${timed}/${totalDj})`);
+        }
+
+        function apiGetCharacter(name, server, keyMin, excluded) {
+            const url = 'https://corsproxy.io/?' + encodeURIComponent(`https://raider.io/api/characters/eu/${server}/${name}?season=season-df-1&tier=29`);
+            var jqxhr = $.ajax(url)
+                .done(function (result) {
+                    apiGetDungeons(result.characterDetails.character, keyMin, excluded);
+                })
+                .fail(function () {
+                    // alert("error");
+                })
+                .always(function () {
+                    // alert("complete");
+                });
+        }
+
+        function apiGetDungeonDetails(bff, runId, char, excluded, callback) {
+            var base = `https://raider.io/api/mythic-plus/runs/season-df-1/${runId}`;
+            const url = 'https://corsproxy.io/?' + encodeURIComponent(base);
+            var details;
+            var jqxhr = $.ajax({ url: url })
+                .done(function (result) {
+                    var run = result.keystoneRun;
+
+                    var roster = run.roster.map(e => e.character.name);
+                    const single = roster.some(r => excluded.indexOf(r) >= 0);
+                    const every = excluded.every(r => roster.includes(r));
+
+                    // if (single) {
+                    //     callback(false)
+                    //     return;
+                    // }
+
+                    if (every) {
+                        callback(false)
+                        return;
+                    }
+
+                    run.roster.forEach(e => {
+
+                        // init bff
+                        if (!bff[e.character.name]) {
+                            bff[e.character.name] = { total: 0, timed: 0, average: 0 };
+                        }
+                        bff[e.character.name].class = e.character.class.name
+
+                        bff[e.character.name].total++;
+                        if (run.num_chests > 0) {
+                            bff[e.character.name].timed++;
+                        }
+                        bff[e.character.name].average = 100 * bff[e.character.name].timed / bff[e.character.name].total;
+
+                    });
+                    updateBff(bff, char);
+                    callback(true);
+                    //$("#bff").append("<br/>");
+
+                })
+                .fail(function () {
+                    // alert("error");
+                })
+                .always(function () {
+                    // alert("complete");
+                });
+
+        }
+
+        function apiGetDungeon(char, dungeon, key_min, bff, excluded, callback) {
+            let dj = dungeon.dungeon;
+            var name = dj.name;
+            var id = dj.id
+
+            var base = `https://raider.io/api/characters/mythic-plus-runs?season=season-df-1&characterId=${char.id}&dungeonId=${id}&role=all&specId=0&mode=scored&affixes=all&date=all`;
+            const url = 'https://corsproxy.io/?' + encodeURIComponent(base);
+
+            var jqxhr = $.ajax({ url: url })
+                .done(function (result) {
+
+                    // filter by minKeylevel
+                    var filter = result.runs.filter(e => e.summary.mythic_level >= key_min);
+
+                    var timed = 0;
+                    var count = 0;
+                    var i = 0;
+                    filter.forEach(run => {
+
+                        apiGetDungeonDetails(bff, run.summary.keystone_run_id, char, excluded, function cb(valid) {
+                            i++;
+                            if (valid) {
+                                if (run.summary.num_chests > 0) {
+                                    timed++;
+                                }
+                                count++;
+                            }
+                            if (i == filter.length) {
+                                var average = parseFloat(timed / count) || 0;
+                                $("#dungeons").append(`${name} :<br/> ${count} runs - `)
+                                $("#dungeons").append(`${Math.round(100 * average)}%<br/><br/>`);
+                                callback({ count, timed });
+                            }
+                        });
+
+                    });
+
+
+
+                })
+                .fail(function () {
+                    // alert("error");
+                })
+                .always(function () {
+                    // alert("complete");
+                });
+        }
+
+        function updateBff(bff, char) {
+            $("#bff").html("");
+
+            // Create items array
+            var sorted = Object.keys(bff).map(function (key) {
+                return [key, bff[key]];
+            });
+
+            // Sort the array based on the second element
+            sorted.sort(function (first, second) {
+                return second[1].average - first[1].average;
+            });
+
+            sorted.forEach(e => {
+                if (e[1].total < 2 || e[0] === char.name) {
+                    return;
+                }
+                addBffRow(e);
+
+            })
+        }
+        function addBffRow(e) {
+            var str = `<tr>
+                <td style="color:${getClassColor(e[1].class)};font-weight:bold">${e[0].split("-")[0]}</td>
+                <td>${e[1].total}</td>
+                <td>${Math.round(e[1].average)}%</td>
+                </tr>`;
+            $("#bff").append(str)
+        }
+
+        function getClassColor(className) {
+            switch (className) {
+                case "Death Knight":
+                    return "#C41E3A";
+                case "Demon Hunter":
+                    return "#A330C9";
+                case "Druid":
+                    return "#FF7C0A";
+                case "Evoker":
+                    return "#33937F";
+                case "Hunter":
+                    return "#AAD372";
+                case "Mage":
+                    return "#3FC7EB";
+                case "Monk":
+                    return "#00FF98";
+                case "Paladin":
+                    return "#F48CBA";
+                case "Priest":
+                    return "#FFFFFF";
+                case "Rogue":
+                    return "#FFF468";
+                case "Shaman":
+                    return "#0070DD";
+                case "Warlock":
+                    return "#8788EE";
+                case "Warrior":
+                    return "#C69B6D";
+                default:
+                    return "#000000"
+            }
+
+        }
+
+        function sortTable(n) {
+            var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+            table = document.getElementById("bff-table");
+            switching = true;
+            // Set the sorting direction to ascending:
+            dir = "asc";
+            /* Make a loop that will continue until
+            no switching has been done: */
+            while (switching) {
+                // Start by saying: no switching is done:
+                switching = false;
+                rows = table.rows;
+                /* Loop through all table rows (except the
+                first, which contains table headers): */
+                for (i = 1; i < (rows.length - 1); i++) {
+                    // Start by saying there should be no switching:
+                    shouldSwitch = false;
+                    /* Get the two elements you want to compare,
+                    one from current row and one from the next: */
+                    x = rows[i].getElementsByTagName("TD")[n];
+                    y = rows[i + 1].getElementsByTagName("TD")[n];
+                    if (n == 0) {
+                        /* Check if the two rows should switch place,
+                                            based on the direction, asc or desc: */
+                        if (dir == "asc") {
+                            if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                                // If so, mark as a switch and break the loop:
+                                shouldSwitch = true;
+                                break;
+                            }
+                        } else if (dir == "desc") {
+                            if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                                // If so, mark as a switch and break the loop:
+                                shouldSwitch = true;
+                                break;
+                            }
+                        }
+                    } else {
+                        if (dir == "asc") {
+                            if (Number(x.innerHTML.replace("%", "")) > Number(y.innerHTML.replace("%", ""))) {
+                                //if so, mark as a switch and break the loop:
+                                shouldSwitch = true;
+                                break;
+                            }
+                        } else if (dir == "desc") {
+                            if (Number(x.innerHTML.replace("%", "")) < Number(y.innerHTML.replace("%", ""))) {
+                                //if so, mark as a switch and break the loop:
+                                shouldSwitch = true;
+                                break;
+                            }
+                        }
+                    }
+
+                }
+                if (shouldSwitch) {
+                    /* If a switch has been marked, make the switch
+                    and mark that a switch has been done: */
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                    // Each time a switch is done, increase this count by 1:
+                    switchcount++;
+                } else {
+                    /* If no switching has been done AND the direction is "asc",
+                    set the direction to "desc" and run the while loop again. */
+                    if (switchcount == 0 && dir == "asc") {
+                        dir = "desc";
+                        switching = true;
+                    }
+                }
+            }
+        }
+
+    </script>
+</body>
+
+</html>
