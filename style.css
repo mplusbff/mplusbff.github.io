@@ -15,11 +15,19 @@ body {
     width:80%;
 }
 
+h2{
+    padding: 0px 10px;;
+}
+
+#content-dungeons-header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
 
 #character {
-    margin: 20px 0px;
+    margin: 20px 10px -10px 10px;
     display: flex;
-    justify-content: center;
     flex-wrap: wrap;
     align-items: center;
     font-size: 65px;
@@ -192,11 +200,35 @@ tbody tr:hover {
     .content-column{
         width: 100%;
     }
+
+    #character {
+        justify-content: center;
+    }
+
+    #character {
+        font-size: 50px;
+    }
+    
+    #character img {
+        position: relative;
+        top: -2px;
+        width: 38px;
+        height: 38px;
+    }
 }
 
 /* Small devices (portrait tablets and large phones, 600px and up) */
 @media only screen and (max-width: 600px) {
-
+    #character {
+        font-size: 40px;
+    }
+    
+    #character img {
+        position: relative;
+        top: -1px;
+        width: 30px;
+        height: 30px;
+    }
 }
 
 /* Extra small devices (phones, 600px and down) */

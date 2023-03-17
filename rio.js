@@ -42,7 +42,8 @@ function apiGetDungeons(char, keyMin, excluded) {
 }
 
 function updateAverage(keyMin, timed, totalDj) {
-    $("#average").html(`Clés timées (${keyMin}+): ${Math.round(100 * timed / totalDj)}% (${timed}/${totalDj})`);
+    $("#key-level").html(`Keys ${keyMin}+`);
+    $("#average").html(`<span style="color:${getQualityColor(timed/totalDj).background}">${Math.round(100 * timed / totalDj)}%</span> Timed (${timed}/${totalDj})`);
 }
 
 function apiGetCharacter(name, server, keyMin, excluded) {
