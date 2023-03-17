@@ -146,6 +146,7 @@ function apiGetDungeon(char, dungeon, key_min, bff, excluded, callback) {
                     }
                     if (i == filter.length) {
                         var average = parseFloat(timed / count) || 0;
+                        $("#dungeons").show()
                         $("#dungeons-content").append(`${name} :<br/> ${count} runs - `)
                         $("#dungeons-content").append(`${Math.round(100 * average)}%<br/><br/>`);
                         callback({ count, timed });
