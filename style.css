@@ -10,9 +10,63 @@ body {
     justify-content: center;
 }
 
+.search {
+    width: 100%;
+    position: relative;
+    display: flex;
+  }
+  
+  .searchTerm {
+    width: 100%;
+    border: 3px solid #0070dd;
+    padding: 5px;
+    height: 20px;
+    outline: none;
+    color: #757575;
+  }
+
+  .search-key{
+    width: 40px;
+    margin-right: -3px;
+    border-radius: 5px 0 0 5px;
+  }
+  
+  .searchTerm:focus{
+    color: #0070dd;
+  }
+  
+  .searchButton {
+    width: 40px;
+    height: 36px;
+    border: 1px solid #0070dd;
+    background: #0070dd;
+    text-align: center;
+    color: #fff;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+    font-size: 20px;
+  }
+
+  .centered-in-page{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  /*Resize the wrap to see the search bar change!*/
+  #wrap{
+    display: flex;
+    width: 300px;
+  }
+
 .main-container {
     margin: 20px;
     width:80%;
+}
+
+label{
+    transform: translate(105%, 100%);
 }
 
 h2{
@@ -23,6 +77,12 @@ h2{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+}
+#header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
 }
 
 #character {
@@ -187,7 +247,9 @@ tbody tr:hover {
 
 /* Large devices (laptops/desktops, 992px and up) */
 @media only screen and (max-width: 992px) {
-  
+    #header{
+        flex-direction: column-reverse;
+    }
   
 }
 
@@ -215,6 +277,8 @@ tbody tr:hover {
         width: 38px;
         height: 38px;
     }
+
+   
 }
 
 /* Small devices (portrait tablets and large phones, 600px and up) */

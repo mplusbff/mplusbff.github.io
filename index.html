@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    
     <link rel="stylesheet" href="./style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
         integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
@@ -17,17 +18,29 @@
 
 <body>
     <div class="main-container">
-        <input type="text" id="name" name="name" placeholder="Mith-dalaran" value="Mith-dalaran" required>
-        <input type="number" id="key-min" name="key-min" value="20" required>
-        <input type="submit" value="go" onClick="start()" />
+       
+        <!-- <input type="text" id="name" name="name" placeholder="Mith-dalaran" value="Mith-dalaran" required> -->
+        <!-- <input type="submit" value="go" onClick="start()" /> -->
         <br />
-        <input type="text" id="exclude" name="exclude" placeholder="Pikachu, Ronflex, Carapuce">
+        <input type="text" id="exclude" name="exclude" placeholder="Pikachu, Ronflex, Carapuce" style="display: none;">
 
-        <div id="character" style="display: none;">
-            <img id="character-img">
-            <div id="character-name"></div>
-            <div id="character-server"></div>
+        <div id="header">
+            <div id="character" style="display: none;">
+                <img id="character-img">
+                <div id="character-name"></div>
+                <div id="character-server"></div>
+            </div>
+            <div id="wrap" class="centered-in-page">
+                <input type="number" id="key-min" name="key-min" value="20" required class="searchTerm search-key">
+                <div class="search">
+                   <input value="Mith-dalaran" type="text"  id="name" name="name" class="searchTerm" placeholder="Naowh-TarrenMill">
+                   <button type="submit" class="searchButton" onClick="start()">
+                     <i class="fa fa-search"></i>
+                  </button>
+                </div>
+             </div>
         </div>
+     
         <div id="content">
             <div id="content-dungeons" class="content-column" style="display: none;">
             <div id="content-dungeons-header">

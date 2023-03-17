@@ -9,9 +9,11 @@ function start() {
     } else {
         $("#dungeons").html("");
         $("#bff-tbody").html("");
+        $("#wrap").removeClass("centered-in-page")
         apiGetCharacter(name, server, keyMin, excluded);
     }
 }
+ 
 
 function apiGetDungeons(char, keyMin, excluded) {
     var totalDj = 0
@@ -39,6 +41,10 @@ function apiGetDungeons(char, keyMin, excluded) {
         .always(function () {
             // alert("complete");
         });
+}
+
+function searchPlayer(){
+    
 }
 
 function updateAverage(keyMin, timed, totalDj) {
@@ -96,6 +102,7 @@ function apiGetDungeonDetails(bff, runId, char, excluded, callback) {
                     bff[e.character.name] = { total: 0, timed: 0, average: 0 };
                 }
                 bff[e.character.name].class = e.character.class.name
+                bff[e.character.name].server = e.character.realm.name
 
                 bff[e.character.name].total++;
                 if (run.num_chests > 0) {
@@ -224,9 +231,14 @@ function updateBff(bff, char) {
 }
 function addBffRow(e) {
     var str = `<tr>
-        <td style="color:${getClassColor(e[1].class)}">${e[0].split("-")[0]}</td>
+        <td style="color:${getClassColor(e[1].class)};cursor:pointer" onclick="search('${e[0]}-${e[1].server}')">${e[0].split("-")[0]}</td>
         <td>${e[1].total}</td>
         <td>${Math.round(e[1].average)}%</td>
         </tr>`;
     $("#bff-tbody").append(str)
+}
+
+function search(name){
+    $("#name").val(name);
+    start()
 }
