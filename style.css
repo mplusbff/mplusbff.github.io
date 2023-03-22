@@ -14,28 +14,32 @@ body {
     width: 100%;
     position: relative;
     display: flex;
-  }
-  
-  .searchTerm {
+}
+
+.searchTerm {
     width: 100%;
     border: 3px solid #0070dd;
     padding: 5px;
     height: 20px;
     outline: none;
     color: #757575;
-  }
+}
 
-  .search-key{
+.searchTerm.error {
+    border-color: red;
+}
+
+.search-key {
     width: 40px;
     margin-right: -3px;
     border-radius: 5px 0 0 5px;
-  }
-  
-  .searchTerm:focus{
+}
+
+.searchTerm:focus {
     color: #0070dd;
-  }
-  
-  .searchButton {
+}
+
+.searchButton {
     width: 40px;
     height: 36px;
     border: 1px solid #0070dd;
@@ -45,40 +49,70 @@ body {
     border-radius: 0 5px 5px 0;
     cursor: pointer;
     font-size: 20px;
-  }
+}
 
-  .centered-in-page{
+@keyframes shake {
+    0% {
+        margin-left: 0rem;
+    }
+
+    25% {
+        margin-left: 0.5rem;
+    }
+
+    75% {
+        margin-left: -0.5rem;
+    }
+
+    100% {
+        margin-left: 0rem;
+    }
+}
+
+#wrap.error{
+    animation: shake 0.2s ease-in-out 0s 2;
+}
+
+
+.searchButton.error {
+    border-color: red;
+    background: red;
+}
+
+.centered-in-page {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-  }
-  
-  /*Resize the wrap to see the search bar change!*/
-  #wrap{
+}
+
+/*Resize the wrap to see the search bar change!*/
+#wrap {
     display: flex;
     width: 300px;
-  }
+}
 
 .main-container {
     margin: 20px;
-    width:80%;
+    width: 80%;
 }
 
-label{
+label {
     transform: translate(105%, 100%);
 }
 
-h2{
-    padding: 0px 10px;;
+h2 {
+    padding: 0px 10px;
+    ;
 }
 
-#content-dungeons-header{
+#content-dungeons-header {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 }
-#header{
+
+#header {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -136,34 +170,34 @@ tbody tr:hover {
     background-color: #555555;
 }
 
-#content{
+#content {
     display: flex;
     flex-direction: row;
 }
 
-#bff-table{
+#bff-table {
     width: 100%;
 }
 
-.content-column{
+.content-column {
     width: 50%;
     background-color: #66666635;
     padding: 10px;
     border-radius: 10px;
-    margin: 10px; 
+    margin: 10px;
     box-sizing: border-box;
 }
 
 
 
 /*#region Dungeon Card*/
-.dungeon-card {    
+.dungeon-card {
     width: 50%;
     padding: 10px;
     box-sizing: border-box;
 }
 
-.test{
+.test {
     background-color: #242424;
     border-radius: 10px;
     display: flex;
@@ -182,7 +216,8 @@ tbody tr:hover {
     flex-direction: column;
     width: 100%;
 }
-.dungeon-info{
+
+.dungeon-info {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -191,12 +226,13 @@ tbody tr:hover {
 }
 
 .dungeon-bar {
-    margin: 10px 0px ;
+    margin: 10px 0px;
     width: 100%;
     background-color: lightgray;
     height: 20px;
     border-radius: 10px;
 }
+
 .dungeon-bar-fill {
     background-color: #ff8000;
     height: 20px;
@@ -205,33 +241,44 @@ tbody tr:hover {
     box-sizing: border-box;
     border-radius: 10px;
 }
-.dungeon-details{
-    margin-top:5px
+
+.dungeon-details {
+    margin-top: 5px
 }
 
-.dungeon-details span{
+.dungeon-details span {
     color: greenyellow
 }
 
-.dungeon-name{
+.dungeon-name {
     font-family: "Bebas neue";
     font-size: 1.1em;
 }
 
-.dungeon-bar-text{
+.dungeon-bar-text {
     position: relative;
 }
 
 /*#endregion */
-#dungeons{
+#dungeons {
     padding: 0px;
     display: flex;
     flex-wrap: wrap;
 }
 
+@keyframes FadeIn {
+    from {
+        color: #0070dd;
+    }
+
+    to {
+        color: white;
+    }
+}
+
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (max-width: 1440px) {
-    .dungeon-card {    
+    .dungeon-card {
         width: 100%;
         padding: 10px;
         box-sizing: border-box;
@@ -240,26 +287,26 @@ tbody tr:hover {
 
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (max-width: 1200px) {
-    .main-container{
-        width:100%;
+    .main-container {
+        width: 100%;
     }
 }
 
 /* Large devices (laptops/desktops, 992px and up) */
 @media only screen and (max-width: 992px) {
-    #header{
+    #header {
         flex-direction: column-reverse;
     }
-  
+
 }
 
 /* Medium devices (landscape tablets, 768px and up) */
 @media only screen and (max-width: 768px) {
-    #content{
+    #content {
         flex-direction: column;
     }
 
-    .content-column{
+    .content-column {
         width: 100%;
     }
 
@@ -270,7 +317,7 @@ tbody tr:hover {
     #character {
         font-size: 50px;
     }
-    
+
     #character img {
         position: relative;
         top: -2px;
@@ -278,7 +325,7 @@ tbody tr:hover {
         height: 38px;
     }
 
-   
+
 }
 
 /* Small devices (portrait tablets and large phones, 600px and up) */
@@ -286,7 +333,7 @@ tbody tr:hover {
     #character {
         font-size: 40px;
     }
-    
+
     #character img {
         position: relative;
         top: -1px;
@@ -296,6 +343,4 @@ tbody tr:hover {
 }
 
 /* Extra small devices (phones, 600px and down) */
-@media only screen and (max-width: 600px) {
-
-}
+@media only screen and (max-width: 600px) {}

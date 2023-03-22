@@ -5,15 +5,40 @@ function start() {
     var excluded = $("#exclude").val().split(",").map(item => item.trim());
 
     if (!name || !server || isNaN(keyMin) || keyMin === "") {
-        alert("Paramètres incorrects.")
+        alert("Paramètres incorrects :\nPseudo-Serveur")
     } else {
-        $("#dungeons").html("");
-        $("#bff-tbody").html("");
-        $("#wrap").removeClass("centered-in-page")
         apiGetCharacter(name, server, keyMin, excluded);
     }
 }
- 
+
+$(document).ready(function () {
+    $("#name").on('keyup', function (e) {
+        if (e.key === 'Enter' || e.keyCode === 13) {
+            start();
+        }
+    });
+
+    $(window).bind('popstate', function () {
+        //checkUrl();
+    });
+
+    checkUrl();
+
+});
+
+
+function checkUrl() {
+    var server = getUrlParameter('server');
+    var name = getUrlParameter('name');
+    var key_level = parseInt(getUrlParameter('key_level'));
+
+    if (server && name && key_level) {
+        var name = $("#name").val(`${name}-${server}`)
+        var keyMin = $("#key-min").val(key_level)
+        start()
+    }
+}
+
 
 function apiGetDungeons(char, keyMin, excluded) {
     var totalDj = 0
@@ -30,7 +55,7 @@ function apiGetDungeons(char, keyMin, excluded) {
                     if (info.count > 0) {
                         totalDj += info.count;
                         timed += info.timed;
-                    } 
+                    }
                     updateAverage(keyMin, timed, totalDj);
                 });
             });
@@ -43,30 +68,53 @@ function apiGetDungeons(char, keyMin, excluded) {
         });
 }
 
-function searchPlayer(){
-    
+function searchPlayer() {
+
 }
 
 function updateAverage(keyMin, timed, totalDj) {
     $("#key-level").html(`Keys ${keyMin}+`);
-    $("#average").html(`<span style="color:${getQualityColor(timed/totalDj).background}">${Math.round(100 * timed / totalDj)}%</span> Timed (${timed}/${totalDj})`);
+    $("#average").html(`<span style="color:${getQualityColor(timed / totalDj).background}">${Math.round(100 * timed / totalDj)}%</span> Timed (${timed}/${totalDj})`);
 }
 
 function apiGetCharacter(name, server, keyMin, excluded) {
     const url = 'https://corsproxy.io/?' + encodeURIComponent(`https://raider.io/api/characters/eu/${server}/${name}?season=season-df-1&tier=29`);
     var jqxhr = $.ajax(url)
         .done(function (result) {
-            
+
             $("#character-name").css("color", getClassColor(result.characterDetails.character.class.name));
             $("#character-name").html(result.characterDetails.character.name);
             $("#character-server").html(result.characterDetails.character.realm.name);
-            $("#character-img").attr("src",result.characterDetails.character.thumbnailUrl);
+            $("#character-img").attr("src", result.characterDetails.character.thumbnailUrl);
             $("#character").show()
+
+            $("#dungeons").html("");
+            $("#bff-tbody").html("");
+            $("#wrap").removeClass("centered-in-page")
+
+
+            var url = new URL(window.location);
+            url.searchParams.set('server', result.characterDetails.character.realm.name);
+            url.searchParams.set('name', result.characterDetails.character.name);
+            url.searchParams.set('key_level', keyMin);
+
+            window.history.pushState({ test: Date.now() }, '', url);
+
+            document.title = `M+ BFF : ${result.characterDetails.character.name}-${result.characterDetails.character.realm.name}`;
 
             apiGetDungeons(result.characterDetails.character, keyMin, excluded);
         })
-        .fail(function () {
-            // alert("error");
+        .fail(function (e) {
+            $(".searchButton").addClass("error");
+            $(".searchTerm").addClass("error");
+            $("#wrap").addClass("error");
+
+            setTimeout(function () {
+                $(".searchButton").removeClass("error")
+                $(".searchTerm").removeClass("error");
+                $("#wrap").removeClass("error");
+            }, 1200);
+
         })
         .always(function () {
             // alert("complete");
@@ -175,37 +223,37 @@ function apiGetDungeon(char, dungeon, key_min, bff, excluded, callback) {
         });
 }
 
-function addNewDungeon(dungeon, count, timed){
-    var percent = Math.round(100*timed/count);
-    var color = getQualityColor(timed/count);
+function addNewDungeon(dungeon, count, timed) {
+    var percent = Math.round(100 * timed / count);
+    var color = getQualityColor(timed / count);
 
-    var str=
-    `<div class="dungeon-card" id="dungeon-${dungeon.dungeon.id}">`+
-    `   <div class="test">`+
-    `       <img src="https://cdnassets.raider.io/images/keystone-icons/${dungeon.dungeon.id}.jpg">`+
-    `       <div class="dungeon-content">`+
-    `               <div class="dungeon-name">${dungeon.dungeon.name}</div>`+
-    `               <div class="dungeon-details"><span>${timed} / ${count}</span> timed</div>`+
-    `           <div class="dungeon-bar">`+
-    `              <div class="dungeon-bar-fill" style="width:${percent}%;background-color:${color.background};color:${color.foreground}">${percent}%</div>`+
-    `           </div>`+
-    `       </div>`+
-    `   </div>`+
-    `</div>`;
-    if ($(`#dungeon-${dungeon.dungeon.id}`).length){
+    var str =
+        `<div class="dungeon-card" id="dungeon-${dungeon.dungeon.id}">` +
+        `   <div class="test">` +
+        `       <img src="https://cdnassets.raider.io/images/keystone-icons/${dungeon.dungeon.id}.jpg">` +
+        `       <div class="dungeon-content">` +
+        `               <div class="dungeon-name">${dungeon.dungeon.name}</div>` +
+        `               <div class="dungeon-details"><span>${timed} / ${count}</span> timed</div>` +
+        `           <div class="dungeon-bar">` +
+        `              <div class="dungeon-bar-fill" style="width:${percent}%;background-color:${color.background};color:${color.foreground}">${percent}%</div>` +
+        `           </div>` +
+        `       </div>` +
+        `   </div>` +
+        `</div>`;
+    if ($(`#dungeon-${dungeon.dungeon.id}`).length) {
         $(`#dungeon-${dungeon.dungeon.id}`).replaceWith(str);
-    }else{
+    } else {
         $("#dungeons").append(str);
     }
 
-    $('.dungeon-card').sort(function(a, b) {
+    $('.dungeon-card').sort(function (a, b) {
         if (a.textContent < b.textContent) {
-          return -1;
+            return -1;
         } else {
-          return 1;
+            return 1;
         }
-      }).appendTo('#dungeons');
-    
+    }).appendTo('#dungeons');
+
 }
 
 function updateBff(bff, char) {
@@ -238,7 +286,7 @@ function addBffRow(e) {
     $("#bff-tbody").append(str)
 }
 
-function search(name){
+function search(name) {
     $("#name").val(name);
     start()
 }
