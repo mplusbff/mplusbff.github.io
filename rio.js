@@ -266,7 +266,7 @@ function updateBff(bff, char) {
 
     // Sort the array based on the second element
     sorted.sort(function (first, second) {
-        return second[1].average - first[1].average;
+        return second[1].total - first[1].total;
     });
 
     sorted.forEach(e => {
