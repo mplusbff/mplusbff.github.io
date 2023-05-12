@@ -44,7 +44,7 @@ function apiGetDungeons(char, keyMin, excluded) {
     var totalDj = 0
     var timed = 0;
 
-    let base = `https://raider.io/api/characters/mythic-plus-scored-runs?season=season-df-1&role=all&mode=scored&affixes=all&date=all&characterId=${char.id}`;
+    let base = `https://raider.io/api/characters/mythic-plus-scored-runs?season=season-df-2&role=all&mode=scored&affixes=all&date=all&characterId=${char.id}`;
     const url = 'https://corsproxy.io/?' + encodeURIComponent(base);
     var jqxhr = $.ajax(url)
         .done(function (result) {
@@ -78,7 +78,7 @@ function updateAverage(keyMin, timed, totalDj) {
 }
 
 function apiGetCharacter(name, server, keyMin, excluded) {
-    const url = 'https://corsproxy.io/?' + encodeURIComponent(`https://raider.io/api/characters/eu/${server}/${name}?season=season-df-1&tier=29`);
+    const url = 'https://corsproxy.io/?' + encodeURIComponent(`https://raider.io/api/characters/eu/${server}/${name}?season=season-df-2&tier=30`);
     var jqxhr = $.ajax(url)
         .done(function (result) {
 
@@ -122,7 +122,7 @@ function apiGetCharacter(name, server, keyMin, excluded) {
 }
 
 function apiGetDungeonDetails(bff, runId, char, excluded, callback) {
-    var base = `https://raider.io/api/mythic-plus/runs/season-df-1/${runId}`;
+    var base = `https://raider.io/api/mythic-plus/runs/season-df-2/${runId}`;
     const url = 'https://corsproxy.io/?' + encodeURIComponent(base);
     var details;
     var jqxhr = $.ajax({ url: url })
@@ -178,7 +178,7 @@ function apiGetDungeon(char, dungeon, key_min, bff, excluded, callback) {
     var name = dj.name;
     var id = dj.id
 
-    var base = `https://raider.io/api/characters/mythic-plus-runs?season=season-df-1&characterId=${char.id}&dungeonId=${id}&role=all&specId=0&mode=scored&affixes=all&date=all`;
+    var base = `https://raider.io/api/characters/mythic-plus-runs?season=season-df-2&characterId=${char.id}&dungeonId=${id}&role=all&specId=0&mode=scored&affixes=all&date=all`;
     const url = 'https://corsproxy.io/?' + encodeURIComponent(base);
 
     var jqxhr = $.ajax({ url: url })
