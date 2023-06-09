@@ -1,7 +1,7 @@
 function start() {
     var name = $("#name").val().split("-")[0]
     var server = $("#name").val().split("-")[1]
-    var keyMin = $("#key-min").val()
+    var keyMin = $("#dual-min1").val()
     var excluded = $("#exclude").val().split(",").map(item => item.trim());
 
     if (!name || !server || isNaN(keyMin) || keyMin === "") {
@@ -37,6 +37,26 @@ function checkUrl() {
         var keyMin = $("#key-min").val(key_level)
         start()
     }
+}
+
+function apiSearchCharacters(){
+    let base = `https://raider.io/api/search?term=mith`
+    const url = 'https://corsproxy.io/?' + encodeURIComponent(base);
+
+    var jqxhr = $.ajax(url)
+    .done(function (result) {
+        var selected  = result.matches.filter(e => e.type == "character").slice(0,5);
+        selected.forEach(char => {
+            console.log(`${char.name}-${char.data.realm.name}`);
+        })
+
+    })
+    .fail(function () {
+        // alert("error");
+    })
+    .always(function () {
+        // alert("complete");
+    });
 }
 
 
