@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>M+ BFF</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-    
+
     <link rel="stylesheet" href="./style.css">
     <link rel="stylesheet" href="./sliders.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
@@ -17,10 +17,10 @@
     <script src="./misc.js"></script>
 </head>
 
-<body onload="dualHelper('dual-min1', 'dual-min1', 'dual-max1', 'dual-slider', 'dual-b1')" 
+<body onload="dualHelper('dual-min1', 'dual-min1', 'dual-max1', 'dual-slider', 'dual-b1')"
     onresize="dualHelper('dual-min1', 'dual-min1', 'dual-max1', 'dual-slider', 'dual-b1')">
+
     <div class="main-container">
-       
         <!-- <input type="text" id="name" name="name" placeholder="Mith-dalaran" value="Mith-dalaran" required> -->
         <!-- <input type="submit" value="go" onClick="start()" /> -->
         <br />
@@ -35,38 +35,40 @@
             <div id="wrap" class="centered-in-page">
                 <!-- <input type="number" id="key-min" name="key-min" value="20" required class="searchTerm search-key"> -->
                 <h3>Personnage : </h3>
+                <div>
                 <div class="search">
-                   <input type="text"  id="name" name="name" class="searchTerm" placeholder="Naowh-TarrenMill">
-                   <button type="submit" class="searchButton" onClick="start()">
-                     <i class="fa fa-search"></i>
-                  </button>
+                    <input type="text" id="name" name="name" class="searchTerm" placeholder="Naowh-TarrenMill">
+                    <button type="submit" class="searchButton" onClick="start()">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+                <div id="search-results"></div>
                 </div>
                 <h3>Niveau de clé : </h3>
                 <div>
+                    <div id="float-min" class="float-value">1</div>
+                    <div id="float-max" class="float-value">26</div>
                     <div class="dual-container" id="dual-slider">
-                      <input type="range" id="dual-min1" class="dual dual-min"
-                             min="0" max="26" value="0"
-                             onInput="dualHelper(this, this, 'dual-max1', 'dual-slider', 'dual-b1');">
-                      <input type="range" id="dual-max1" class="dual dual-max"
-                             min="0" max="26" value="25"
-                             onInput="dualHelper(this, 'dual-min1', this, 'dual-slider', 'dual-b1');">
-                      <div id="dual-b1"></div>
+                        <input type="range" id="dual-min1" class="dual dual-min" min="0" max="26" value="0"
+                            onInput="dualHelper(this, this, 'dual-max1', 'dual-slider', 'dual-b1');">
+                        <input type="range" id="dual-max1" class="dual dual-max" min="0" max="26" value="25"
+                            onInput="dualHelper(this, 'dual-min1', this, 'dual-slider', 'dual-b1');">
+                        <div id="dual-b1"></div>
                     </div>
-                    <div id="float-min" style="position: absolute">1</div>
-                    <div id="float-max" style="position: absolute">26</div>
                    
+
                 </div>
-             </div>
+            </div>
 
         </div>
-     
+
         <div id="content">
             <div id="content-dungeons" class="content-column" style="display: none;">
-            <div id="content-dungeons-header">
-                <h2 id="key-level"></h2>
-                <h2 id="average"></h2>
-            </div>
-                
+                <div id="content-dungeons-header">
+                    <h2 id="key-level"></h2>
+                    <h2 id="average"></h2>
+                </div>
+
                 <section id="dungeons"></section>
             </div>
             <div id="content-bff" class="content-column" style="display: none;">
@@ -78,7 +80,8 @@
                                 <tr class="tr-clickable">
                                     <th onclick="sortTable(0)">Pseudo<i class="fa-solid fa-sort sort-icon"></i></th>
                                     <th onclick="sortTable(1)">Runs<i class="fa-solid fa-sort sort-icon"></i></th>
-                                    <th onclick="sortTable(2)">Clées timées<i class="fa-solid fa-sort sort-icon"></i></th>
+                                    <th onclick="sortTable(2)">Clées timées<i class="fa-solid fa-sort sort-icon"></i>
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody id="bff-tbody"></tbody>

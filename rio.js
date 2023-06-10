@@ -11,6 +11,7 @@ function start() {
     }
 }
 
+
 $(document).ready(function () {
     $("#name").on('keyup', function (e) {
         if (e.key === 'Enter' || e.keyCode === 13) {
@@ -18,13 +19,34 @@ $(document).ready(function () {
         }
     });
 
+    let inputTimeout = null;
+    $("#name").on('input', function () {
+        clearTimeout(inputTimeout);
+
+        inputTimeout = setTimeout(function () {
+            apiSearchCharacters($("#name").val());
+        }, 250);
+
+    })
+
     $(window).bind('popstate', function () {
         //checkUrl();
     });
 
     checkUrl();
 
+    setUpSearch();
+
 });
+
+function setUpSearch() {
+    window.addEventListener('click', function (e) {
+        if (!document.getElementById('search-results').contains(e.target)) {
+         $("#name").val($("#search-results .result-name").first().text())
+           $("#search-results").hide();
+        }
+    });
+}
 
 
 function checkUrl() {
@@ -39,24 +61,41 @@ function checkUrl() {
     }
 }
 
-function apiSearchCharacters(){
-    let base = `https://raider.io/api/search?term=mith`
-    const url = 'https://corsproxy.io/?' + encodeURIComponent(base);
+function apiSearchCharacters(name) {
+    var searchResults = document.getElementById("search-results");
+    searchResults.innerHTML = "";
+    if (!name) return;
+    let base = `https://raider.io/api/search?term=${name}`
+    //const url = 'https://corsproxy.io/?' + encodeURIComponent(base);
 
-    var jqxhr = $.ajax(url)
-    .done(function (result) {
-        var selected  = result.matches.filter(e => e.type == "character").slice(0,5);
-        selected.forEach(char => {
-            console.log(`${char.name}-${char.data.realm.name}`);
+    var jqxhr = $.ajax(base)
+        .done(function (result) {
+
+            var selected = result.matches.filter(e => e.type == "character").slice(0, 5);
+            selected.forEach(char => {
+                $("#search-results").show()
+                var container = document.createElement("div");
+                container.className = "single-result";
+                var img = document.createElement("div");
+                img.className = `result-icon class-icon class-icon-small class-${char.data.class.name.toLowerCase().replace(' ', '')}`;
+                var name = document.createElement("div");
+                name.className = "result-name"
+                name.innerHTML = `${char.name}-${char.data.realm.name}`;
+
+                container.appendChild(img);
+                container.appendChild(name);
+
+                searchResults.appendChild(container);
+
+            })
+
         })
-
-    })
-    .fail(function () {
-        // alert("error");
-    })
-    .always(function () {
-        // alert("complete");
-    });
+        .fail(function () {
+            // alert("error");
+        })
+        .always(function () {
+            // alert("complete");
+        });
 }
 
 
@@ -65,8 +104,8 @@ function apiGetDungeons(char, keyMin, excluded) {
     var timed = 0;
 
     let base = `https://raider.io/api/characters/mythic-plus-scored-runs?season=season-df-2&role=all&mode=scored&affixes=all&date=all&characterId=${char.id}`;
-    const url = 'https://corsproxy.io/?' + encodeURIComponent(base);
-    var jqxhr = $.ajax(url)
+    //const url = 'https://corsproxy.io/?' + encodeURIComponent(base);
+    var jqxhr = $.ajax(base)
         .done(function (result) {
             var bff = [];
             result.dungeons.forEach(dungeon => {
@@ -88,18 +127,15 @@ function apiGetDungeons(char, keyMin, excluded) {
         });
 }
 
-function searchPlayer() {
-
-}
-
 function updateAverage(keyMin, timed, totalDj) {
     $("#key-level").html(`Keys ${keyMin}+`);
     $("#average").html(`<span style="color:${getQualityColor(timed / totalDj).background}">${Math.round(100 * timed / totalDj)}%</span> Timed (${timed}/${totalDj})`);
 }
 
 function apiGetCharacter(name, server, keyMin, excluded) {
-    const url = 'https://corsproxy.io/?' + encodeURIComponent(`https://raider.io/api/characters/eu/${server}/${name}?season=season-df-2&tier=30`);
-    var jqxhr = $.ajax(url)
+    var base = `https://raider.io/api/characters/eu/${server}/${name}?season=season-df-2&tier=30`;
+    //const url = 'https://corsproxy.io/?' + encodeURIComponent(base);
+    var jqxhr = $.ajax(base)
         .done(function (result) {
 
             $("#character-name").css("color", getClassColor(result.characterDetails.character.class.name));
@@ -143,9 +179,9 @@ function apiGetCharacter(name, server, keyMin, excluded) {
 
 function apiGetDungeonDetails(bff, runId, char, excluded, callback) {
     var base = `https://raider.io/api/mythic-plus/runs/season-df-2/${runId}`;
-    const url = 'https://corsproxy.io/?' + encodeURIComponent(base);
+    //const url = 'https://corsproxy.io/?' + encodeURIComponent(base);
     var details;
-    var jqxhr = $.ajax({ url: url })
+    var jqxhr = $.ajax({ url: base })
         .done(function (result) {
             var run = result.keystoneRun;
 
@@ -199,9 +235,9 @@ function apiGetDungeon(char, dungeon, key_min, bff, excluded, callback) {
     var id = dj.id
 
     var base = `https://raider.io/api/characters/mythic-plus-runs?season=season-df-2&characterId=${char.id}&dungeonId=${id}&role=all&specId=0&mode=scored&affixes=all&date=all`;
-    const url = 'https://corsproxy.io/?' + encodeURIComponent(base);
+    //const url = 'https://corsproxy.io/?' + encodeURIComponent(base);
 
-    var jqxhr = $.ajax({ url: url })
+    var jqxhr = $.ajax({ url: base })
         .done(function (result) {
 
             // filter by minKeylevel
