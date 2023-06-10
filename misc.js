@@ -140,6 +140,7 @@ var getUrlParameter = function getUrlParameter(sParam) {
 };
 
 
+let sliderTimeout = null;
 function dualHelper(active, min, max, container, bar) {
     active = getDomObject(active);              // slider which is beign draged
     min = getDomObject(min);                    // minumum slider
@@ -181,6 +182,13 @@ function dualHelper(active, min, max, container, bar) {
     minText.innerHTML = minValue + 1 ;
     maxText.style.left = `${positionMax-(maxText.clientWidth/2)-(minText.clientWidth)}px`;
     maxText.innerHTML = maxValue + 1 ;
+
+    
+    clearTimeout(sliderTimeout);
+    sliderTimeout = setTimeout(function () {
+        start(false);
+    }, 2000);
+    
     return;
   }
 

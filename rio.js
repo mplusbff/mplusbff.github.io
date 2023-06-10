@@ -1,4 +1,4 @@
-function start() {
+function start(showAlert) {
     var name = $("#name").val().split("-")[0]
     var server = $("#name").val().split("-")[1]
     var keyMin = $("#dual-min1").val()
@@ -6,7 +6,10 @@ function start() {
     var excluded = $("#exclude").val().split(",").map(item => item.trim());
 
     if (!name || !server || isNaN(keyMin) || isNaN(keyMin)) {
-        alert("Paramètres incorrects :\nPseudo-Serveur")
+        if (showAlert){
+            alert("Paramètres incorrects :\nPseudo-Serveur")
+        }
+        
     } else {
         apiGetCharacter(name, server, parseInt(keyMin) + 1, parseInt(keyMax) + 1, excluded);
     }
@@ -16,7 +19,7 @@ function start() {
 $(document).ready(function () {
     $("#name").on('keyup', function (e) {
         if (e.key === 'Enter' || e.keyCode === 13) {
-            start();
+            start(true);
         }
     });
 
@@ -61,7 +64,7 @@ function checkUrl() {
         $("#name").val(`${name}-${server}`)
         $("#dual-min1").val(key_level_min -1)
         $("#dual-max1").val(key_level_max -1)
-        start()
+        start(false)
     }
 }
 
@@ -353,7 +356,3 @@ function addBffRow(e) {
     $("#bff-tbody").append(str)
 }
 
-function search(name) {
-    $("#name").val(name);
-    start()
-}
