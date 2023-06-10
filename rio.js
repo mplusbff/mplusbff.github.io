@@ -2,12 +2,13 @@ function start() {
     var name = $("#name").val().split("-")[0]
     var server = $("#name").val().split("-")[1]
     var keyMin = $("#dual-min1").val()
+    var keyMax = $("#dual-max1").val()
     var excluded = $("#exclude").val().split(",").map(item => item.trim());
 
-    if (!name || !server || isNaN(keyMin) || keyMin === "") {
+    if (!name || !server || isNaN(keyMin) || isNaN(keyMin)) {
         alert("Paramètres incorrects :\nPseudo-Serveur")
     } else {
-        apiGetCharacter(name, server, keyMin, excluded);
+        apiGetCharacter(name, server, parseInt(keyMin) + 1, parseInt(keyMax) + 1, excluded);
     }
 }
 
@@ -53,11 +54,13 @@ function setUpSearch() {
 function checkUrl() {
     var server = getUrlParameter('server');
     var name = getUrlParameter('name');
-    var key_level = parseInt(getUrlParameter('key_level'));
+    var key_level_min = parseInt(getUrlParameter('key_level_min'));
+    var key_level_max = parseInt(getUrlParameter('key_level_max'));
 
-    if (server && name && key_level) {
-        var name = $("#name").val(`${name}-${server}`)
-        var keyMin = $("#key-min").val(key_level)
+    if (server && name && key_level_min && key_level_max) {
+        $("#name").val(`${name}-${server}`)
+        $("#dual-min1").val(key_level_min -1)
+        $("#dual-max1").val(key_level_max -1)
         start()
     }
 }
@@ -107,7 +110,7 @@ function apiSearchCharacters(name) {
 }
 
 
-function apiGetDungeons(char, keyMin, excluded) {
+function apiGetDungeons(char, keyMin, keyMax, excluded) {
     var totalDj = 0
     var timed = 0;
 
@@ -117,13 +120,13 @@ function apiGetDungeons(char, keyMin, excluded) {
         .done(function (result) {
             var bff = [];
             result.dungeons.forEach(dungeon => {
-                apiGetDungeon(char, dungeon, keyMin, bff, excluded, function callback(info) {
+                apiGetDungeon(char, dungeon, keyMin, keyMax, bff, excluded, function callback(info) {
 
                     if (info.count > 0) {
                         totalDj += info.count;
                         timed += info.timed;
                     }
-                    updateAverage(keyMin, timed, totalDj);
+                    updateAverage(keyMin, keyMax, timed, totalDj);
                 });
             });
         })
@@ -135,12 +138,12 @@ function apiGetDungeons(char, keyMin, excluded) {
         });
 }
 
-function updateAverage(keyMin, timed, totalDj) {
-    $("#key-level").html(`Keys ${keyMin}+`);
+function updateAverage(keyMin,keyMax, timed, totalDj) {
+    $("#key-level").html(`Keys ${keyMin} - ${keyMax}`);
     $("#average").html(`<span style="color:${getQualityColor(timed / totalDj).background}">${Math.round(100 * timed / totalDj)}%</span> Timed (${timed}/${totalDj})`);
 }
 
-function apiGetCharacter(name, server, keyMin, excluded) {
+function apiGetCharacter(name, server, keyMin, keyMax, excluded) {
     const url = 'https://corsproxy.io/?' + encodeURIComponent(`https://raider.io/api/characters/eu/${server}/${name}?season=season-df-2&tier=30`);
     var jqxhr = $.ajax(url)
         .done(function (result) {
@@ -159,13 +162,14 @@ function apiGetCharacter(name, server, keyMin, excluded) {
             var url = new URL(window.location);
             url.searchParams.set('server', result.characterDetails.character.realm.name);
             url.searchParams.set('name', result.characterDetails.character.name);
-            url.searchParams.set('key_level', keyMin);
+            url.searchParams.set('key_level_min', keyMin);
+            url.searchParams.set('key_level_max', keyMax);
 
             window.history.pushState({ test: Date.now() }, '', url);
 
             document.title = `M+ BFF : ${result.characterDetails.character.name}-${result.characterDetails.character.realm.name}`;
 
-            apiGetDungeons(result.characterDetails.character, keyMin, excluded);
+            apiGetDungeons(result.characterDetails.character, keyMin, keyMax, excluded);
         })
         .fail(function (e) {
             $(".searchButton").addClass("error");
@@ -236,7 +240,7 @@ function apiGetDungeonDetails(bff, runId, char, excluded, callback) {
 
 }
 
-function apiGetDungeon(char, dungeon, key_min, bff, excluded, callback) {
+function apiGetDungeon(char, dungeon, key_min, key_max, bff, excluded, callback) {
     let dj = dungeon.dungeon;
     var name = dj.name;
     var id = dj.id
@@ -248,7 +252,7 @@ function apiGetDungeon(char, dungeon, key_min, bff, excluded, callback) {
         .done(function (result) {
 
             // filter by minKeylevel
-            var filter = result.runs.filter(e => e.summary.mythic_level >= key_min);
+            var filter = result.runs.filter(e => e.summary.mythic_level >= key_min && e.summary.mythic_level <= key_max);
 
             var timed = 0;
             var count = 0;
