@@ -279,8 +279,9 @@ tbody tr:hover {
 }
 
 .float-value{
-    bottom: 25px;
-    position: absolute
+    bottom: 5px;
+    float: left;
+    position: relative
 }
 
 #search-results{

@@ -139,6 +139,7 @@ input[type="range"].dual-max::-webkit-slider-thumb {
 .dual-container {
   position: relative;
   height: 7px;
+  width: 300px;
   min-width: 250px;
   margin-top: 20px; 
   margin-bottom: 11px; 

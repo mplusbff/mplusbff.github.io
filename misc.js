@@ -179,7 +179,7 @@ function dualHelper(active, min, max, container, bar) {
 
     minText.style.left = `${positionMin-(minText.clientWidth/2)}px`;
     minText.innerHTML = minValue + 1 ;
-    maxText.style.left = `${positionMax-(maxText.clientWidth/2)}px`;
+    maxText.style.left = `${positionMax-(maxText.clientWidth/2)-(minText.clientWidth)}px`;
     maxText.innerHTML = maxValue + 1 ;
     return;
   }

@@ -42,8 +42,10 @@ $(document).ready(function () {
 function setUpSearch() {
     window.addEventListener('click', function (e) {
         if (!document.getElementById('search-results').contains(e.target)) {
-         $("#name").val($("#search-results .result-name").first().text())
-           $("#search-results").hide();
+            var name = $("#search-results .result-name").first().text();
+            if (name) { $("#name").val(name)}
+            
+            $("#search-results").hide();
         }
     });
 }
@@ -69,6 +71,7 @@ function apiSearchCharacters(name) {
 
     var jqxhr = $.ajax(url)
         .done(function (result) {
+            searchResults.innerHTML = "";
 
             var selected = result.matches.filter(e => e.type == "character").slice(0, 5);
             selected.forEach(char => {
@@ -83,6 +86,12 @@ function apiSearchCharacters(name) {
 
                 container.appendChild(img);
                 container.appendChild(name);
+
+                container.addEventListener('click', function(e){
+                    $("#name").val(`${char.name}-${char.data.realm.name}`);
+                    searchResults.style.display = "none"
+                    searchResults.innerHTML = ""
+                });
 
                 searchResults.appendChild(container);
 
