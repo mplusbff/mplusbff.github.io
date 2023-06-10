@@ -48,7 +48,6 @@ function setUpSearch() {
     });
 }
 
-
 function checkUrl() {
     var server = getUrlParameter('server');
     var name = getUrlParameter('name');
@@ -65,10 +64,10 @@ function apiSearchCharacters(name) {
     var searchResults = document.getElementById("search-results");
     searchResults.innerHTML = "";
     if (!name) return;
-    let base = `https://raider.io/api/search?term=${name}`
-    //const url = 'https://corsproxy.io/?' + encodeURIComponent(base);
+    let base = `https://raider.io/api/search?term=${encodeURIComponent(name)}`
+    const url = 'https://corsproxy.io/?' + encodeURIComponent(base);
 
-    var jqxhr = $.ajax(base)
+    var jqxhr = $.ajax(url)
         .done(function (result) {
 
             var selected = result.matches.filter(e => e.type == "character").slice(0, 5);
@@ -104,8 +103,8 @@ function apiGetDungeons(char, keyMin, excluded) {
     var timed = 0;
 
     let base = `https://raider.io/api/characters/mythic-plus-scored-runs?season=season-df-2&role=all&mode=scored&affixes=all&date=all&characterId=${char.id}`;
-    //const url = 'https://corsproxy.io/?' + encodeURIComponent(base);
-    var jqxhr = $.ajax(base)
+    const url = 'https://corsproxy.io/?' + encodeURIComponent(base);
+    var jqxhr = $.ajax(url)
         .done(function (result) {
             var bff = [];
             result.dungeons.forEach(dungeon => {
@@ -133,9 +132,8 @@ function updateAverage(keyMin, timed, totalDj) {
 }
 
 function apiGetCharacter(name, server, keyMin, excluded) {
-    var base = `https://raider.io/api/characters/eu/${server}/${name}?season=season-df-2&tier=30`;
-    //const url = 'https://corsproxy.io/?' + encodeURIComponent(base);
-    var jqxhr = $.ajax(base)
+    const url = 'https://corsproxy.io/?' + encodeURIComponent(`https://raider.io/api/characters/eu/${server}/${name}?season=season-df-2&tier=30`);
+    var jqxhr = $.ajax(url)
         .done(function (result) {
 
             $("#character-name").css("color", getClassColor(result.characterDetails.character.class.name));
@@ -179,9 +177,9 @@ function apiGetCharacter(name, server, keyMin, excluded) {
 
 function apiGetDungeonDetails(bff, runId, char, excluded, callback) {
     var base = `https://raider.io/api/mythic-plus/runs/season-df-2/${runId}`;
-    //const url = 'https://corsproxy.io/?' + encodeURIComponent(base);
+    const url = 'https://corsproxy.io/?' + encodeURIComponent(base);
     var details;
-    var jqxhr = $.ajax({ url: base })
+    var jqxhr = $.ajax({ url: url })
         .done(function (result) {
             var run = result.keystoneRun;
 
@@ -235,9 +233,9 @@ function apiGetDungeon(char, dungeon, key_min, bff, excluded, callback) {
     var id = dj.id
 
     var base = `https://raider.io/api/characters/mythic-plus-runs?season=season-df-2&characterId=${char.id}&dungeonId=${id}&role=all&specId=0&mode=scored&affixes=all&date=all`;
-    //const url = 'https://corsproxy.io/?' + encodeURIComponent(base);
+    const url = 'https://corsproxy.io/?' + encodeURIComponent(base);
 
-    var jqxhr = $.ajax({ url: base })
+    var jqxhr = $.ajax({ url: url })
         .done(function (result) {
 
             // filter by minKeylevel
