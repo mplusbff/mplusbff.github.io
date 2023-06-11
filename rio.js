@@ -6,10 +6,10 @@ function start(showAlert) {
     var excluded = $("#exclude").val().split(",").map(item => item.trim());
 
     if (!name || !server || isNaN(keyMin) || isNaN(keyMin)) {
-        if (showAlert){
+        if (showAlert) {
             alert("Paramètres incorrects :\nPseudo-Serveur")
         }
-        
+
     } else {
         apiGetCharacter(name, server, parseInt(keyMin) + 1, parseInt(keyMax) + 1, excluded);
     }
@@ -47,8 +47,8 @@ function setUpSearch() {
     window.addEventListener('click', function (e) {
         if (!document.getElementById('search-results').contains(e.target)) {
             var name = $("#search-results .result-name").first().text();
-            if (name) { $("#name").val(name)}
-            
+            if (name) { $("#name").val(name) }
+
             $("#search-results").hide();
         }
     });
@@ -62,8 +62,8 @@ function checkUrl() {
 
     if (server && name && key_level_min && key_level_max) {
         $("#name").val(`${name}-${server}`)
-        $("#dual-min1").val(key_level_min -1)
-        $("#dual-max1").val(key_level_max -1)
+        $("#dual-min1").val(key_level_min - 1)
+        $("#dual-max1").val(key_level_max - 1)
         start(false)
     }
 }
@@ -93,7 +93,7 @@ function apiSearchCharacters(name) {
                 container.appendChild(img);
                 container.appendChild(name);
 
-                container.addEventListener('click', function(e){
+                container.addEventListener('click', function (e) {
                     $("#name").val(`${char.name}-${char.data.realm.name}`);
                     searchResults.style.display = "none"
                     searchResults.innerHTML = ""
@@ -122,8 +122,9 @@ function apiGetDungeons(char, keyMin, keyMax, excluded) {
     var jqxhr = $.ajax(url)
         .done(function (result) {
             var bff = [];
+            var stats = [];
             result.dungeons.forEach(dungeon => {
-                apiGetDungeon(char, dungeon, keyMin, keyMax, bff, excluded, function callback(info) {
+                apiGetDungeon(char, dungeon, keyMin, keyMax, bff, stats, excluded, function callback(info) {
 
                     if (info.count > 0) {
                         totalDj += info.count;
@@ -141,7 +142,7 @@ function apiGetDungeons(char, keyMin, keyMax, excluded) {
         });
 }
 
-function updateAverage(keyMin,keyMax, timed, totalDj) {
+function updateAverage(keyMin, keyMax, timed, totalDj) {
     $("#key-level").html(`Keys ${keyMin} - ${keyMax}`);
     $("#average").html(`<span style="color:${getQualityColor(timed / totalDj).background}">${Math.round(100 * timed / totalDj)}%</span> Timed (${timed}/${totalDj})`);
 }
@@ -243,9 +244,8 @@ function apiGetDungeonDetails(bff, runId, char, excluded, callback) {
 
 }
 
-function apiGetDungeon(char, dungeon, key_min, key_max, bff, excluded, callback) {
+function apiGetDungeon(char, dungeon, key_min, key_max, bff, stats, excluded, callback) {
     let dj = dungeon.dungeon;
-    var name = dj.name;
     var id = dj.id
 
     var base = `https://raider.io/api/characters/mythic-plus-runs?season=season-df-2&characterId=${char.id}&dungeonId=${id}&role=all&specId=0&mode=scored&affixes=all&date=all`;
@@ -265,18 +265,23 @@ function apiGetDungeon(char, dungeon, key_min, key_max, bff, excluded, callback)
                 apiGetDungeonDetails(bff, run.summary.keystone_run_id, char, excluded, function cb(valid) {
                     i++;
                     if (valid) {
+                        if (!stats[run.summary.mythic_level]) {
+                            stats[run.summary.mythic_level] = { timed: 0, count: 0 };
+                        }
                         if (run.summary.num_chests > 0) {
+                            stats[run.summary.mythic_level].timed++;
                             timed++;
                         }
+
+                        stats[run.summary.mythic_level].count++;
                         count++;
                     }
                     if (i == filter.length) {
                         var average = parseFloat(timed / count) || 0;
                         $("#content-dungeons").show()
-                        //$("#dungeons-content").append(`${name} :<br/> ${count} runs - `)
-                        //$("#dungeons-content").append(`${Math.round(100 * average)}%<br/><br/>`);
                         addNewDungeon(dungeon, count, timed);
                         callback({ count, timed });
+                        updateStats(stats);
                     }
                 });
 
@@ -291,6 +296,14 @@ function apiGetDungeon(char, dungeon, key_min, key_max, bff, excluded, callback)
         .always(function () {
             // alert("complete");
         });
+}
+
+function updateStats(stats){
+    $("#content-charts").show("");
+    createKeyStats(stats);
+    
+    $("#content-charts2").show("");
+    createKeyStats2(stats);
 }
 
 function addNewDungeon(dungeon, count, timed) {
@@ -356,3 +369,7 @@ function addBffRow(e) {
     $("#bff-tbody").append(str)
 }
 
+function search(name) {
+    $("#name").val(name);
+    start()
+}

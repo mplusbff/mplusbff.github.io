@@ -175,6 +175,7 @@ tbody tr:hover {
 #content {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
 }
 
 #bff-table {
@@ -182,7 +183,7 @@ tbody tr:hover {
 }
 
 .content-column {
-    width: 50%;
+    width: 45%;
     background-color: #66666635;
     padding: 10px;
     border-radius: 10px;
