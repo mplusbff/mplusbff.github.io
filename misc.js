@@ -184,10 +184,10 @@ function dualHelper(active, min, max, container, bar) {
     maxText.innerHTML = maxValue + 1 ;
 
     
-    clearTimeout(sliderTimeout);
-    sliderTimeout = setTimeout(function () {
-        start(false);
-    }, 2000);
+    // clearTimeout(sliderTimeout);
+    // sliderTimeout = setTimeout(function () {
+    //     start(false);
+    // }, 2000);
     
     return;
   }
