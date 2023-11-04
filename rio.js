@@ -1,6 +1,6 @@
 var proxy = true;
 var proxyURL = 'https://jeromeduban.fr/mplusbff/forward.php?api_url=';
-var proxyEncode = false;
+var proxyEncode = true;
 
 function start(showAlert) {
     var name = $("#name").val().split("-")[0]
