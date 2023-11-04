@@ -80,10 +80,7 @@ function apiSearchCharacters(name) {
     const url = proxyURL.concat(proxyEncode ? encodeURIComponent(base) : base);
 
     $.ajax({
-        url: proxy ? url : base,
-        headers: {
-            'x-cors-api-key': 'temp_fcd3e62e9a5c07ebe2f0a0bac788cd32'
-        }
+        url: proxy ? url : base
     })
         .done(function (result) {
             searchResults.innerHTML = "";
@@ -129,10 +126,7 @@ function apiGetDungeons(char, keyMin, keyMax, excluded) {
     let base = `https://raider.io/api/characters/mythic-plus-scored-runs?season=season-df-2&role=all&mode=scored&affixes=all&date=all&characterId=${char.id}`;
     const url = proxyURL.concat(proxyEncode ? encodeURIComponent(base) : base);
     var jqxhr = $.ajax({
-        url: proxy ? url : base,
-        headers: {
-            'x-cors-api-key': 'temp_fcd3e62e9a5c07ebe2f0a0bac788cd32'
-        }
+        url: proxy ? url : base
     })
         .done(function (result) {
             var bff = [];
@@ -166,10 +160,7 @@ function apiGetCharacter(name, server, keyMin, keyMax, excluded) {
     const url = proxyURL.concat(proxyEncode ? encodeURIComponent(base) : base);
 
     $.ajax({
-        url: proxy ? url : base,
-        headers: {
-            'x-cors-api-key': 'temp_fcd3e62e9a5c07ebe2f0a0bac788cd32'
-        }
+        url: proxy ? url : base
     })
         .done(function (result) {
 
@@ -218,10 +209,7 @@ function apiGetDungeonDetails(bff, runId, char, excluded, callback) {
     const url = proxyURL.concat(proxyEncode ? encodeURIComponent(base) : base);
     var details;
     $.ajax({ 
-        url: proxy ? url : base,
-        headers: {
-            'x-cors-api-key': 'temp_fcd3e62e9a5c07ebe2f0a0bac788cd32'
-            } })
+        url: proxy ? url : base })
         .done(function (result) {
             var run = result.keystoneRun;
 
@@ -277,10 +265,7 @@ function apiGetDungeon(char, dungeon, key_min, key_max, bff, stats, excluded, ca
     const url = proxyURL.concat(proxyEncode ? encodeURIComponent(base) : base);
 
     var jqxhr = $.ajax({ 
-        url: proxy ? url : base,
-        headers: {
-            'x-cors-api-key': 'temp_fcd3e62e9a5c07ebe2f0a0bac788cd32'
-            } })
+        url: proxy ? url : base})
         .done(function (result) {
 
             // filter by minKeylevel
