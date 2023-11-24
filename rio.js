@@ -1,5 +1,5 @@
 var proxy = true;
-var proxyURL = 'https://jeromeduban.fr/mplusbff/forward.php?api_url=';
+var proxyURL = '';
 var proxyEncode = true;
 
 function start(showAlert) {
